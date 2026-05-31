@@ -1,14 +1,13 @@
 ﻿<Window x:Class="ShoeStoreApp.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Магазин обуви" 
-        Height="550" Width="900"
-        WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        Title="Каталог товаров - Магазин обуви"
+        Height="650" Width="1050"
+        MinHeight="550" MinWidth="900"
+        WindowStartupLocation="CenterScreen">
 
-    <DockPanel>
-        <!-- Верхняя панель -->
-        <Border DockPanel.Dock="Top" Background="#2C3E50" Height="50">
+    <DockPanel Background="#F4F6F8">
+        <Border DockPanel.Dock="Top" Background="#2C3E50" Padding="12,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -16,64 +15,157 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0">
-                    <Image Width="40" Height="40" Source="/Resources/logo.png"/>
-                    <TextBlock Text="Магазин обуви" Foreground="White" FontSize="16" Margin="10,0"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <Image Width="38" Height="38" Source="/Resources/logo.png"/>
+                    <StackPanel Margin="10,0,0,0">
+                        <TextBlock Text="Магазин обуви" Foreground="White" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="Каталог товаров" Foreground="#D6EAF8" FontSize="12"/>
+                    </StackPanel>
                 </StackPanel>
 
-                <!-- Кнопка добавления товара (видна только админу) -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,0">
-                    <Button x:Name="btnAddProduct" Content="➕ Добавить товар" 
-                            Width="120" Height="35" Background="Green" Foreground="White"
-                            Click="btnAddProduct_Click" Visibility="Collapsed"/>
-                </StackPanel>
+                <Button x:Name="btnAddProduct"
+                        Grid.Column="1"
+                        Content="Добавить товар"
+                        Width="145" Height="34"
+                        HorizontalAlignment="Center"
+                        Background="#27AE60" Foreground="White"
+                        Click="btnAddProduct_Click"
+                        Visibility="Collapsed"/>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="0,0,15,0">
-                    <TextBlock x:Name="lblUserFio" Foreground="White" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                    <TextBlock x:Name="lblUserRole" Foreground="LightGray" FontSize="12" VerticalAlignment="Center" Margin="0,0,15,0"/>
-                    <Button x:Name="btnLogout" Content="Выйти" Width="80" Height="30"
-                            Background="#E74C3C" Foreground="White" Click="btnLogout_Click"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <StackPanel VerticalAlignment="Center" Margin="0,0,15,0">
+                        <TextBlock x:Name="lblUserFio" Foreground="White" FontSize="14" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="lblUserRole" Foreground="LightGray" FontSize="12" HorizontalAlignment="Right"/>
+                    </StackPanel>
+                    <Button x:Name="btnLogout"
+                            Content="Назад к входу"
+                            Width="115" Height="30"
+                            Background="#E74C3C" Foreground="White"
+                            Click="btnLogout_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Список товаров с кнопкой удаления у каждого -->
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Border x:Name="filterPanel"
+                DockPanel.Dock="Top"
+                Margin="12,12,12,6"
+                Padding="12"
+                Background="White"
+                BorderBrush="#D5D8DC"
+                BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Поиск по текстовым данным" FontWeight="SemiBold"/>
+                    <TextBox x:Name="txtSearch"
+                             Margin="0,5,0,0"
+                             Height="28"
+                             ToolTip="Можно ввести несколько слов: каждое слово будет найдено в доступных текстовых полях товара."
+                             TextChanged="txtSearch_TextChanged"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Text="Поставщик" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="cmbSupplierFilter"
+                              Margin="0,5,0,0"
+                              Height="28"
+                              SelectionChanged="cmbSupplierFilter_SelectionChanged"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Text="Количество на складе" FontWeight="SemiBold"/>
+                    <ComboBox x:Name="cmbQuantitySort"
+                              Margin="0,5,0,0"
+                              Height="28"
+                              SelectedIndex="0"
+                              SelectionChanged="cmbQuantitySort_SelectionChanged">
+                        <ComboBoxItem Content="Без сортировки" Tag=""/>
+                        <ComboBoxItem Content="По возрастанию" Tag="Quantity ASC"/>
+                        <ComboBoxItem Content="По убыванию" Tag="Quantity DESC"/>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border DockPanel.Dock="Bottom" Background="#EAECEE" Padding="12,7">
+            <TextBlock x:Name="lblProductCount" Foreground="#566573"/>
+        </Border>
+
+        <ScrollViewer Margin="12,6,12,6" VerticalScrollBarVisibility="Auto">
             <ItemsControl x:Name="itemsProducts">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="#DDD" BorderThickness="0,0,0,1" Padding="10" Margin="5,0">
+                        <Border Margin="0,0,0,8"
+                                Padding="12"
+                                Background="White"
+                                BorderBrush="#D5D8DC"
+                                BorderThickness="1"
+                                MouseLeftButtonUp="ProductBorder_MouseLeftButtonUp">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="115"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="155"/>
                                 </Grid.ColumnDefinitions>
 
-                                <!-- Фото -->
-                                <Image Grid.Column="0" Width="80" Height="80" Stretch="Uniform"
+                                <Image Grid.Column="0"
+                                       Width="100" Height="90"
+                                       Stretch="Uniform"
                                        Source="{Binding PhotoImage}"/>
 
-                                <!-- Информация -->
-                                <StackPanel Grid.Column="1" Margin="15,5">
-                                    <TextBlock Text="{Binding Name}" FontSize="16" FontWeight="Bold"/>
-                                    <TextBlock><Run Text="Категория: "/><Run Text="{Binding Category}"/></TextBlock>
-                                    <TextBlock><Run Text="Описание: "/><Run Text="{Binding Description}"/></TextBlock>
-                                    <TextBlock><Run Text="Производитель: "/><Run Text="{Binding Brand}"/></TextBlock>
-                                    <TextBlock><Run Text="Поставщик: "/><Run Text="{Binding Supplier}"/></TextBlock>
-                                    <TextBlock><Run Text="Цена: "/><Run Text="{Binding Price, StringFormat={}{0:N0}}" Foreground="Red"/><Run Text=" руб."/></TextBlock>
-                                    <TextBlock><Run Text="Кол-во: "/><Run Text="{Binding Quantity}"/></TextBlock>
+                                <StackPanel Grid.Column="1" Margin="14,0,10,0">
+                                    <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="Bold"/>
+                                    <TextBlock Margin="0,2,0,0">
+                                        <Run Text="Артикул: "/><Run Text="{Binding Article}"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap">
+                                        <Run Text="Категория: "/><Run Text="{Binding Category}"/>
+                                        <Run Text=" | Производитель: "/><Run Text="{Binding Brand}"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap">
+                                        <Run Text="Поставщик: "/><Run Text="{Binding Supplier}"/>
+                                    </TextBlock>
+                                    <TextBlock TextWrapping="Wrap" Foreground="#566573">
+                                        <Run Text="Описание: "/><Run Text="{Binding Description}"/>
+                                    </TextBlock>
                                 </StackPanel>
 
-                                <!-- Кнопка удаления -->
-                                <Button Grid.Column="2" 
-                                        Content="❌ Удалить" 
-                                        Width="80" Height="30"
-                                        Background="#E74C3C" 
-                                        Foreground="White"
-                                        Tag="{Binding ProductID}"
-                                        Click="btnDeleteProduct_Click"
-                                        x:Name="btnDelete"
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock HorizontalAlignment="Right">
+                                        <Run Text="{Binding Price, StringFormat={}{0:N2}}" Foreground="#C0392B" FontWeight="Bold"/>
+                                        <Run Text=" руб."/>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Right">
+                                        <Run Text="На складе: "/><Run Text="{Binding Quantity}" FontWeight="Bold"/>
+                                        <Run Text=" "/><Run Text="{Binding UnitOfMeasure}"/>
+                                    </TextBlock>
+                                    <TextBlock HorizontalAlignment="Right">
+                                        <Run Text="Скидка: "/><Run Text="{Binding Discount, StringFormat={}{0:N2}}"/>
+                                        <Run Text="%"/>
+                                    </TextBlock>
+
+                                    <StackPanel Margin="0,12,0,0"
+                                                Visibility="{Binding AdminActionsVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
+                                        <Button Content="Редактировать"
+                                                Height="28"
+                                                Margin="0,0,0,5"
+                                                Tag="{Binding ProductID}"
+                                                Click="btnEditProduct_Click"/>
+                                        <Button Content="Удалить"
+                                                Height="28"
+                                                Background="#E74C3C"
+                                                Foreground="White"
+                                                Tag="{Binding ProductID}"
+                                                Click="btnDeleteProduct_Click"/>
+                                    </StackPanel>
+                                </StackPanel>
                             </Grid>
                         </Border>
                     </DataTemplate>

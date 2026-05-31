@@ -18,27 +18,51 @@ namespace ShoeStoreApp.Views
 
             if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(password))
             {
-                MessageBox.Show("Введите логин или пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show(
+                    "Введите логин и пароль. Заполните оба поля и повторите вход.",
+                    "Проверьте данные",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
                 return;
             }
 
-            bool success = DatabaseHelper.CheckLogin(login, password, out string fullName, out string role);
-
-            if (success)
+            try
             {
-                UserSession.FullName = fullName;
-                UserSession.Role = role;
-                UserSession.IsAuthenticated = true;
+                bool success = DatabaseHelper.CheckLogin(login, password, out string fullName, out string role);
 
-                MessageBox.Show($"Добро пожаловать {fullName}", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (success)
+                {
+                    UserSession.FullName = fullName;
+                    UserSession.Role = role;
+                    UserSession.IsAuthenticated = true;
 
-                MainWindow mainWindow = new MainWindow();
-                mainWindow.Show();
-                this.Close();
+                    MessageBox.Show(
+                        $"Добро пожаловать, {fullName}.",
+                        "Вход выполнен",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+
+                    MainWindow mainWindow = new MainWindow();
+                    mainWindow.Show();
+                    Close();
+                }
+                else
+                {
+                    MessageBox.Show(
+                        "Логин или пароль указаны неверно. Проверьте раскладку клавиатуры, регистр символов и повторите вход.",
+                        "Ошибка авторизации",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                }
             }
-            else
+            catch (System.Exception exception)
             {
-                MessageBox.Show("Неверный логин или пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Не удалось выполнить вход. Проверьте подключение к базе данных и повторите попытку.\n\n" +
+                    "Подробности: " + exception.Message,
+                    "Ошибка подключения",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
             }
         }
     }

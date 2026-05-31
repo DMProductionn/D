@@ -78,6 +78,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\ProductRecord.cs" />
     <Compile Include="Models\UserSession.cs" />
     <Compile Include="Services\DatabaseHelper.cs" />
     <Compile Include="Views\AddProductWindow.xaml.cs">
