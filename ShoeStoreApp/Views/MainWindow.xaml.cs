@@ -150,15 +150,6 @@ namespace ShoeStoreApp.Views
             OpenProductEditor(null);
         }
 
-        private void btnEditProduct_Click(object sender, RoutedEventArgs e)
-        {
-            e.Handled = true;
-            Button button = sender as Button;
-
-            if (button != null)
-                OpenProductEditor(Convert.ToInt32(button.Tag));
-        }
-
         private void ProductBorder_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (!UserSession.IsAdmin || FindParent<Button>(e.OriginalSource as DependencyObject) != null)

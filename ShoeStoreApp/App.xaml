@@ -4,6 +4,34 @@
              xmlns:local="clr-namespace:ShoeStoreApp"
              StartupUri="/Views/LoginWindow.xaml">
     <Application.Resources>
-         
+        <SolidColorBrush x:Key="MainBackgroundBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="AdditionalBackgroundBrush" Color="#7FFF00"/>
+        <SolidColorBrush x:Key="ActionBrush" Color="#00FA9A"/>
+
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Background" Value="{StaticResource AdditionalBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Padding" Value="6,2"/>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Background" Value="{StaticResource MainBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AdditionalBackgroundBrush}"/>
+        </Style>
+
+        <Style TargetType="{x:Type PasswordBox}">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Background" Value="{StaticResource MainBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AdditionalBackgroundBrush}"/>
+        </Style>
+
+        <Style TargetType="{x:Type ComboBox}">
+            <Setter Property="FontFamily" Value="Times New Roman"/>
+            <Setter Property="Background" Value="{StaticResource MainBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource AdditionalBackgroundBrush}"/>
+        </Style>
     </Application.Resources>
 </Application>

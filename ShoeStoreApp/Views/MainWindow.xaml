@@ -4,10 +4,13 @@
         Title="Каталог товаров - Магазин обуви"
         Height="650" Width="1050"
         MinHeight="550" MinWidth="900"
+        Icon="/Resources/logo.png"
+        FontFamily="Times New Roman"
+        Background="{StaticResource MainBackgroundBrush}"
         WindowStartupLocation="CenterScreen">
 
-    <DockPanel Background="#F4F6F8">
-        <Border DockPanel.Dock="Top" Background="#2C3E50" Padding="12,8">
+    <DockPanel Background="{StaticResource MainBackgroundBrush}">
+        <Border DockPanel.Dock="Top" Background="{StaticResource AdditionalBackgroundBrush}" Padding="12,8">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -16,10 +19,10 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Horizontal">
-                    <Image Width="38" Height="38" Source="/Resources/logo.png"/>
+                    <Image Height="38" Stretch="Uniform" Source="/Resources/logo.png"/>
                     <StackPanel Margin="10,0,0,0">
-                        <TextBlock Text="Магазин обуви" Foreground="White" FontSize="16" FontWeight="Bold"/>
-                        <TextBlock Text="Каталог товаров" Foreground="#D6EAF8" FontSize="12"/>
+                        <TextBlock Text="Магазин обуви" Foreground="Black" FontSize="16" FontWeight="Bold"/>
+                        <TextBlock Text="Каталог товаров" Foreground="Black" FontSize="12"/>
                     </StackPanel>
                 </StackPanel>
 
@@ -28,19 +31,18 @@
                         Content="Добавить товар"
                         Width="145" Height="34"
                         HorizontalAlignment="Center"
-                        Background="#27AE60" Foreground="White"
+                        Background="{StaticResource ActionBrush}" Foreground="Black"
                         Click="btnAddProduct_Click"
                         Visibility="Collapsed"/>
 
                 <StackPanel Grid.Column="2" Orientation="Horizontal">
                     <StackPanel VerticalAlignment="Center" Margin="0,0,15,0">
-                        <TextBlock x:Name="lblUserFio" Foreground="White" FontSize="14" HorizontalAlignment="Right"/>
-                        <TextBlock x:Name="lblUserRole" Foreground="LightGray" FontSize="12" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="lblUserFio" Foreground="Black" FontSize="14" HorizontalAlignment="Right"/>
+                        <TextBlock x:Name="lblUserRole" Foreground="Black" FontSize="12" HorizontalAlignment="Right"/>
                     </StackPanel>
                     <Button x:Name="btnLogout"
                             Content="Назад к входу"
                             Width="115" Height="30"
-                            Background="#E74C3C" Foreground="White"
                             Click="btnLogout_Click"/>
                 </StackPanel>
             </Grid>
@@ -50,8 +52,8 @@
                 DockPanel.Dock="Top"
                 Margin="12,12,12,6"
                 Padding="12"
-                Background="White"
-                BorderBrush="#D5D8DC"
+                Background="{StaticResource MainBackgroundBrush}"
+                BorderBrush="{StaticResource AdditionalBackgroundBrush}"
                 BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -94,8 +96,8 @@
             </Grid>
         </Border>
 
-        <Border DockPanel.Dock="Bottom" Background="#EAECEE" Padding="12,7">
-            <TextBlock x:Name="lblProductCount" Foreground="#566573"/>
+        <Border DockPanel.Dock="Bottom" Background="{StaticResource AdditionalBackgroundBrush}" Padding="12,7">
+            <TextBlock x:Name="lblProductCount" Foreground="Black"/>
         </Border>
 
         <ScrollViewer Margin="12,6,12,6" VerticalScrollBarVisibility="Auto">
@@ -103,69 +105,91 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Margin="0,0,0,8"
-                                Padding="12"
-                                Background="White"
-                                BorderBrush="#D5D8DC"
+                                Background="{StaticResource MainBackgroundBrush}"
+                                BorderBrush="{StaticResource AdditionalBackgroundBrush}"
                                 BorderThickness="1"
                                 MouseLeftButtonUp="ProductBorder_MouseLeftButtonUp">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="115"/>
+                                    <ColumnDefinition Width="220"/>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="155"/>
+                                    <ColumnDefinition Width="180"/>
                                 </Grid.ColumnDefinitions>
 
-                                <Image Grid.Column="0"
-                                       Width="100" Height="90"
-                                       Stretch="Uniform"
-                                       Source="{Binding PhotoImage}"/>
+                                <Border Grid.Column="0"
+                                        Margin="8"
+                                        BorderBrush="{StaticResource AdditionalBackgroundBrush}"
+                                        BorderThickness="1">
+                                    <Image Width="200" Height="145"
+                                           Stretch="Uniform"
+                                           Source="{Binding PhotoImage}"/>
+                                </Border>
 
-                                <StackPanel Grid.Column="1" Margin="14,0,10,0">
-                                    <TextBlock Text="{Binding Name}" FontSize="17" FontWeight="Bold"/>
-                                    <TextBlock Margin="0,2,0,0">
-                                        <Run Text="Артикул: "/><Run Text="{Binding Article}"/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap">
-                                        <Run Text="Категория: "/><Run Text="{Binding Category}"/>
-                                        <Run Text=" | Производитель: "/><Run Text="{Binding Brand}"/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap">
-                                        <Run Text="Поставщик: "/><Run Text="{Binding Supplier}"/>
-                                    </TextBlock>
-                                    <TextBlock TextWrapping="Wrap" Foreground="#566573">
-                                        <Run Text="Описание: "/><Run Text="{Binding Description}"/>
-                                    </TextBlock>
-                                </StackPanel>
-
-                                <StackPanel Grid.Column="2">
-                                    <TextBlock HorizontalAlignment="Right">
-                                        <Run Text="{Binding Price, StringFormat={}{0:N2}}" Foreground="#C0392B" FontWeight="Bold"/>
-                                        <Run Text=" руб."/>
-                                    </TextBlock>
-                                    <TextBlock HorizontalAlignment="Right">
-                                        <Run Text="На складе: "/><Run Text="{Binding Quantity}" FontWeight="Bold"/>
-                                        <Run Text=" "/><Run Text="{Binding UnitOfMeasure}"/>
-                                    </TextBlock>
-                                    <TextBlock HorizontalAlignment="Right">
-                                        <Run Text="Скидка: "/><Run Text="{Binding Discount, StringFormat={}{0:N2}}"/>
-                                        <Run Text="%"/>
-                                    </TextBlock>
-
-                                    <StackPanel Margin="0,12,0,0"
-                                                Visibility="{Binding AdminActionsVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}">
-                                        <Button Content="Редактировать"
-                                                Height="28"
-                                                Margin="0,0,0,5"
-                                                Tag="{Binding ProductID}"
-                                                Click="btnEditProduct_Click"/>
-                                        <Button Content="Удалить"
-                                                Height="28"
-                                                Background="#E74C3C"
-                                                Foreground="White"
-                                                Tag="{Binding ProductID}"
-                                                Click="btnDeleteProduct_Click"/>
+                                <Border Grid.Column="1"
+                                        Margin="0,8"
+                                        Padding="14,8"
+                                        BorderBrush="{StaticResource AdditionalBackgroundBrush}"
+                                        BorderThickness="1">
+                                    <StackPanel>
+                                        <TextBlock FontSize="17" FontWeight="Bold" TextWrapping="Wrap">
+                                            <Run Text="{Binding Category}"/>
+                                            <Run Text=" | "/>
+                                            <Run Text="{Binding Name}"/>
+                                        </TextBlock>
+                                        <TextBlock Margin="0,4,0,0" TextWrapping="Wrap">
+                                            <Run Text="Описание товара: "/><Run Text="{Binding Description}"/>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Производитель: "/><Run Text="{Binding Brand}"/>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap">
+                                            <Run Text="Поставщик: "/><Run Text="{Binding Supplier}"/>
+                                        </TextBlock>
+                                        <TextBlock>
+                                            <Run Text="Цена: "/>
+                                            <Run Text="{Binding Price, StringFormat={}{0:N2}}" FontWeight="Bold"/>
+                                            <Run Text=" руб."/>
+                                        </TextBlock>
+                                        <TextBlock>
+                                            <Run Text="Единица измерения: "/><Run Text="{Binding UnitOfMeasure}"/>
+                                        </TextBlock>
+                                        <TextBlock>
+                                            <Run Text="Количество на складе: "/><Run Text="{Binding Quantity}" FontWeight="Bold"/>
+                                        </TextBlock>
                                     </StackPanel>
-                                </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2"
+                                        Margin="0,8,8,8"
+                                        BorderBrush="{StaticResource AdditionalBackgroundBrush}"
+                                        BorderThickness="1">
+                                    <Grid>
+                                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            <TextBlock Text="Действующая"
+                                                       HorizontalAlignment="Center"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Text="скидка"
+                                                       HorizontalAlignment="Center"
+                                                       FontWeight="SemiBold"/>
+                                            <TextBlock Margin="0,6,0,0"
+                                                       HorizontalAlignment="Center"
+                                                       FontSize="18"
+                                                       FontWeight="Bold">
+                                                <Run Text="{Binding Discount, StringFormat={}{0:N2}}"/>
+                                                <Run Text="%"/>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <Button Content="Удалить"
+                                                Width="105" Height="28"
+                                                Margin="8"
+                                                VerticalAlignment="Bottom"
+                                                HorizontalAlignment="Center"
+                                                Tag="{Binding ProductID}"
+                                                Click="btnDeleteProduct_Click"
+                                                Visibility="{Binding AdminActionsVisibility, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                                    </Grid>
+                                </Border>
                             </Grid>
                         </Border>
                     </DataTemplate>

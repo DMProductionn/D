@@ -4,20 +4,23 @@
         Title="Добавление товара - Магазин обуви"
         Height="760" Width="690"
         MinHeight="620" MinWidth="620"
+        Icon="/Resources/logo.png"
+        FontFamily="Times New Roman"
+        Background="{StaticResource MainBackgroundBrush}"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded"
         Closing="Window_Closing">
 
-    <DockPanel Background="#F4F6F8">
-        <Border DockPanel.Dock="Top" Background="#2C3E50" Padding="16,12">
+    <DockPanel Background="{StaticResource MainBackgroundBrush}">
+        <Border DockPanel.Dock="Top" Background="{StaticResource AdditionalBackgroundBrush}" Padding="16,12">
             <TextBlock x:Name="lblHeading"
                        Text="Добавление товара"
-                       Foreground="White"
+                       Foreground="Black"
                        FontSize="20"
                        FontWeight="Bold"/>
         </Border>
 
-        <Border DockPanel.Dock="Bottom" Padding="14" Background="#EAECEE">
+        <Border DockPanel.Dock="Bottom" Padding="14" Background="{StaticResource AdditionalBackgroundBrush}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="btnBack"
                         Content="Назад"
@@ -27,7 +30,7 @@
                 <Button x:Name="btnSave"
                         Content="Сохранить"
                         Width="125" Height="34"
-                        Background="#27AE60" Foreground="White"
+                        Background="{StaticResource ActionBrush}" Foreground="Black"
                         Click="btnSave_Click"/>
             </StackPanel>
         </Border>
@@ -60,16 +63,17 @@
                             Margin="0,0,0,10"
                             Visibility="Collapsed">
                     <TextBlock Text="ID товара:" Width="185" VerticalAlignment="Center"/>
-                    <TextBox x:Name="txtProductId" Width="180" IsReadOnly="True" Background="#EAECEE"/>
+                    <TextBox x:Name="txtProductId" Width="180" IsReadOnly="True"
+                             Background="{StaticResource AdditionalBackgroundBrush}"/>
                 </StackPanel>
 
                 <TextBlock Grid.Row="1" Text="Фото товара:" VerticalAlignment="Top"/>
                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,10">
                     <Border Width="310" Height="210"
                             HorizontalAlignment="Left"
-                            BorderBrush="#D5D8DC"
+                            BorderBrush="{StaticResource AdditionalBackgroundBrush}"
                             BorderThickness="1"
-                            Background="White">
+                            Background="{StaticResource MainBackgroundBrush}">
                         <Image x:Name="imgPhoto" Width="300" Height="200" Stretch="Uniform"/>
                     </Border>
                     <StackPanel Orientation="Horizontal" Margin="0,7,0,0">
@@ -78,7 +82,7 @@
                                 Width="165" Height="28"
                                 Click="btnSelectPhoto_Click"/>
                         <TextBlock Text=" Максимум 300x200 пикселей"
-                                   Foreground="#566573"
+                                   Foreground="Black"
                                    VerticalAlignment="Center"/>
                     </StackPanel>
                 </StackPanel>
