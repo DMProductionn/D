@@ -1,0 +1,82 @@
+USE ShoeStore;
+GO
+
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'ProductWarehouse')
+    DROP TABLE ProductWarehouse;
+GO
+
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Products')
+    DROP TABLE Products;
+GO
+
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Warehouses')
+    DROP TABLE Warehouses;
+GO
+
+IF EXISTS (SELECT * FROM sys.tables WHERE name = 'Users')
+    DROP TABLE Users;
+GO
+
+-- ============================================
+-- СОЗДАЕМ ТАБЛИЦЫ
+-- ============================================
+
+-- Таблица 1: Users (Пользователи)
+CREATE TABLE Users (
+    UserId INT IDENTITY(1,1) PRIMARY KEY,
+    Login NVARCHAR(50) NOT NULL UNIQUE,
+    Password NVARCHAR(100) NOT NULL,
+    FullName NVARCHAR(100) NULL,
+    Role NVARCHAR(20) NOT NULL
+);
+GO
+
+CREATE TABLE Warehouses (
+    WarehouseID INT IDENTITY(1,1) PRIMARY KEY,
+    WarehouseName NVARCHAR(100) NOT NULL,
+    Location NVARCHAR(200) NULL
+);
+GO
+
+-- Таблица 3: Products (Товары)
+CREATE TABLE Products (
+    ProductId INT IDENTITY(1,1) PRIMARY KEY,
+    Article NVARCHAR(20) NOT NULL UNIQUE,
+    Name NVARCHAR(200) NOT NULL,
+    Brand NVARCHAR(50) NULL,
+    Category NVARCHAR(50) NULL,
+    Quantity INT NOT NULL,
+    Supplier NVARCHAR(100) NULL,
+    Price DECIMAL(18,2) NOT NULL,
+    Description NVARCHAR(500) NULL,
+    PhotoPath NVARCHAR(200) NULL,
+    UnitOfMeasure NVARCHAR(20) NULL,
+    Discount DECIMAL(5,2) NULL,
+    CreatedByUserId INT NULL
+);
+GO
+
+CREATE TABLE ProductWarehouse (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    ProductId INT NOT NULL,
+    WarehouseID INT NOT NULL,
+    QuantityOnStock INT NULL
+);
+GO
+ALTER TABLE Products
+ADD CONSTRAINT FK_Products_Users
+FOREIGN KEY (CreatedByUserId) REFERENCES Users(UserId);
+GO
+
+ALTER TABLE ProductWarehouse
+ADD CONSTRAINT FK_ProductWarehouse_Products
+FOREIGN KEY (ProductId) REFERENCES Products(ProductId);
+GO
+
+ALTER TABLE ProductWarehouse
+ADD CONSTRAINT FK_ProductWarehouse_Warehouses
+FOREIGN KEY (WarehouseID) REFERENCES Warehouses(WarehouseID);
+GO
+
+SELECT name FROM sys.tables;
+GO
