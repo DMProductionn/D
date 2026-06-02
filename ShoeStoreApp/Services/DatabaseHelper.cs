@@ -9,8 +9,7 @@ namespace ShoeStoreApp.Services
 {
     internal static class DatabaseHelper
     {
-        private static readonly string ConnectionString =
-            ConfigurationManager.ConnectionStrings["ShoeStoreDB"].ConnectionString;
+        private static readonly string ConnectionString = GetConnectionString();
 
         private static readonly object SchemaLock = new object();
         private static bool _schemaEnsured;
@@ -485,6 +484,21 @@ namespace ShoeStoreApp.Services
         private static string QuoteIdentifier(string value)
         {
             return "[" + value.Replace("]", "]]") + "]";
+        }
+
+        private static string GetConnectionString()
+        {
+            ConnectionStringSettings settings =
+                ConfigurationManager.ConnectionStrings["ShoeStoreDB"];
+
+            if (settings == null || string.IsNullOrWhiteSpace(settings.ConnectionString))
+            {
+                throw new ConfigurationErrorsException(
+                    "В App.config не найдена строка подключения ShoeStoreDB. " +
+                    "Добавьте обычную строку подключения SQL Server без ключевого слова Provider.");
+            }
+
+            return settings.ConnectionString;
         }
     }
 }
