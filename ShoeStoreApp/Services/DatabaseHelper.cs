@@ -196,19 +196,13 @@ namespace ShoeStoreApp.Services
                             if (identityInsertEnabled)
                                 SetIdentityInsert(connection, transaction, false);
                         }
-                        catch
-                        {
-                            // The connection is closed immediately below, so session state cannot leak.
-                        }
+                       
 
                         try
                         {
                             transaction.Rollback();
                         }
-                        catch
-                        {
-                            // Preserve the original database error if the transaction is already invalid.
-                        }
+                      
 
                         throw;
                     }
@@ -329,7 +323,6 @@ namespace ShoeStoreApp.Services
                 {
                     connection.Open();
 
-                    // These fields are required by the product form but were absent in the initial database.
                     const string query = @"
                         IF COL_LENGTH(N'Products', N'Supplier') IS NULL
                             ALTER TABLE Products ADD Supplier NVARCHAR(200) NOT NULL
@@ -372,7 +365,6 @@ namespace ShoeStoreApp.Services
             if (HasRowsInReferenceTables(connection, foreignKeysQuery, productId))
                 return true;
 
-            // Some training databases omit foreign keys. Check conventional order tables as a fallback.
             const string orderTablesQuery = @"
                 SELECT schemas.name AS SchemaName,
                        tables.name AS TableName,
